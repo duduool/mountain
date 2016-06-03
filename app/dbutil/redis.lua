@@ -1,26 +1,36 @@
 local redis = require("resty.redis")
 
-function get_redis()
-    local cache = redis:new()
-    local ok, err = cache:connect("127.0.0.1", "6379")
+local Redis = {}
 
-    ok, err = cache:set("dog", "an animal")
+function Redis:get_redis()
+    local red = redis:new()
+    red:select(1)
+    local ok, err = red:connect("192.168.50.202", "6379")
     if not ok then
-        ngx.say("Failed to set dog:", err)
+        ngx.log(ngx.ERR, "Failed to connect:", err)
         return
     end
-    ngx.say("Set result:", ok)
+    return red
 end
 
-local json = require("cjson")
-local str = [[ {
-					"name": "qiaox",
-					"age": "22"
-				} ]]
-
-local t = json.decode(str)
-ngx.say("-->", type(t))
-for k, v in pairs(t) do
-    ngx.say(k, v)
+function Redis:set(k, v)
+    local ok, err = self:get_redis():set("dog", "an animal")
+    if not ok then
+        ngx.log(ngx.ERR, "Failed to set:", k, err)
+        return
+    end
 end
-ngx.print("Hello, world")
+
+function Redis:get(k)
+    local red = redis:new()
+    local ok, err = red:connect("192.168.50.202", "6379")
+    if not ok then
+        ngx.log(ngx.ERR, "Failed to connect:", err)
+        return
+    end
+    red:select(1)
+    local result = red:get(k)
+    return result
+end
+
+return Redis

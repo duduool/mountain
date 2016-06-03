@@ -1,11 +1,3 @@
---
--- Created by IntelliJ IDEA.
--- User: qiaox
--- Date: 2016/5/24 0024
--- Time: 13:53
--- To change this template use File | Settings | File Templates.
---
-
 local router = {
     _VERSION     = 'router.lua v2.1.0',
     _DESCRIPTION = 'A simple router for Lua'
@@ -122,7 +114,13 @@ end
 local router_mt = { __index = Router }
 
 ------------------------------ PUBLIC INTERFACE ------------------------------------
+--[[
 router.new = function()
+    return setmetatable({ _tree = {} }, router_mt)
+end
+]]--
+
+function router.new(self)
     return setmetatable({ _tree = {} }, router_mt)
 end
 

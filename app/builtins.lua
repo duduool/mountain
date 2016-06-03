@@ -4,15 +4,17 @@ local cjson = import "cjson"
 local http = import "resty.http"
 local mysql = import "resty.mysql"
 
+-- http://www.example.com/get/info?name=qiaox&age=22
+
 function ngx_var()
-    --ngx.say(ngx.var.uri)
-    --ngx.say(ngx.var.request_uri)
-    --ngx.say(ngx.var.arg_a)
-    --ngx.say(ngx.var.args)
+    --ngx.say(ngx.var.uri)              --/get/info
+    --ngx.say(ngx.var.request_uri)      --/get/info?name=qiaox&age=22
+    --ngx.say(ngx.var.arg_name)         --qiaox
+    --ngx.say(ngx.var.args)             --"name=qiaox&age=22"
 
     --ngx.req.read_body()
-    --local a = ngx.req.get_uri_args()
-    --local b = ngx.req.get_post_args()
+    --ngx.say(ngx.req.get_uri_args())   --{name="qiaox", age="22"}
+    --ngx.say(ngx.req.get_post_args())
     ngx.say(ngx.var.host)
     ngx.say(ngx.var.hostname)
     ngx.say(ngx.var.request)
@@ -73,6 +75,6 @@ function tmysql()
     db:close()
 end
 
-tmysql()
+thttp()
 
 require("mobdebug").done()
